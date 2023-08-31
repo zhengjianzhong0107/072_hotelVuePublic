@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hsr.hotel.mapper.RoomTypeMapper">
+    <resultMap id="BaseResultMap" type="com.hsr.hotel.entity.RoomType">
+        <id column="type_id" jdbcType="INTEGER" property="typeId"/>
+        <result column="room_type" jdbcType="VARCHAR" property="roomType"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="discount" jdbcType="DOUBLE" property="discount"/>
+        <result column="area" jdbcType="INTEGER" property="area"/>
+        <result column="bed_num" jdbcType="INTEGER" property="bedNum"/>
+        <result column="bed_size" jdbcType="VARCHAR" property="bedSize"/>
+        <result column="cover" jdbcType="VARCHAR" property="cover"/>
+        <result column="windows" jdbcType="INTEGER" property="windows"/>
+        <result column="rest" jdbcType="INTEGER" property="rest"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    type_id, room_type, remark,cover,price, discount, area, bed_num, bed_size, windows, rest,create_time,
+    update_time
+  </sql>
+    <select id="getCount" resultType="java.lang.Integer">
+    select count(type_id) from room_type
+  </select>
+    <!--通过类型查询房间信息-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+       <!-- <include refid="Base_Column_List"/>-->
+        *
+        from room_type
+        where type_id = #{typeId,jdbcType=INTEGER}
+    </select>
+
+    <!--  查询所有房间类型-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <!--    <include refid="Base_Column_List" />-->
+        *
+        from room_type
+        <where>
+            <if test="search!=null and search != ''">
+                room_type like concat('%',#{search},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllWithRest" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from room_type where rest > 0
+    </select>
+    <select id="selectByRoomType" parameterType="String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from room_type
+        where room_type = #{roomType,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from room_type
+    where type_id = #{typeId,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete from room_type
+        <where>
+            <foreach item="item" index="index" collection="ids"
+                     open="type_id in (" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </delete>
+    <insert id="insert" parameterType="com.hsr.hotel.entity.RoomType">
+    insert into room_type (type_id, room_type, remark,
+      price, discount, area,
+      bed_num, bed_size, windows, rest
+      create_time, update_time)
+    values (#{typeId,jdbcType=INTEGER}, #{roomType,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+      #{price,jdbcType=DOUBLE}, #{discount,jdbcType=DOUBLE}, #{area,jdbcType=INTEGER},
+      #{bedNum,jdbcType=INTEGER}, #{bedSize,jdbcType=VARCHAR}, #{windows,jdbcType=INTEGER},
+      #{rest,jdbcType=INTEGER},
+      now(), now())
+  </insert>
+    <insert id="insertSelective" parameterType="com.hsr.hotel.entity.RoomType">
+        insert into room_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="typeId != null">
+                type_id,
+            </if>
+            <if test="roomType != null">
+                room_type,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="discount != null">
+                discount,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="bedNum != null">
+                bed_num,
+            </if>
+            <if test="cover != null">
+                cover,
+            </if>
+            <if test="bedSize != null">
+                bed_size,
+            </if>
+            <if test="windows != null">
+                windows,
+            </if>
+            <if test="rest != null">
+                rest,
+            </if>
+            create_time,
+            update_time,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="typeId != null">
+                #{typeId,jdbcType=INTEGER},
+            </if>
+            <if test="roomType != null">
+                #{roomType,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="discount != null">
+                #{discount,jdbcType=DOUBLE},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=INTEGER},
+            </if>
+            <if test="bedNum != null">
+                #{bedNum,jdbcType=INTEGER},
+            </if>
+            <if test="cover != null">
+                #{cover,jdbcType=VARCHAR},
+            </if>
+            <if test="bedSize != null">
+                #{bedSize,jdbcType=VARCHAR},
+            </if>
+            <if test="windows != null">
+                #{windows,jdbcType=INTEGER},
+            </if>
+            <if test="rest != null">
+                #{rest,jdbcType=INTEGER},
+            </if>
+            now(),
+            now(),
+        </trim>
+    </insert>
+
+
+    <!--获取对应房间类型的总数-->
+    <select id="selectTypePercent" resultType="java.util.Map">
+        SELECT room_type as roomType, rest from  room_type GROUP BY room_type;
+    </select>
+
+    <select id="selectSumType" resultType="java.lang.Integer">
+        SELECT sum(rest) from room_type;
+    </select>
+
+
+    <!--更新房间类型-->
+    <update id="updateByPrimaryKeySelective" parameterType="com.hsr.hotel.entity.RoomType">
+        update room_type
+        <set>
+            <if test="roomType != null">
+                room_type = #{roomType,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="discount != null">
+                discount = #{discount,jdbcType=DOUBLE},
+            </if>
+            <if test="area != null">
+                area = #{area,jdbcType=INTEGER},
+            </if>
+            <if test="bedNum != null">
+                bed_num = #{bedNum,jdbcType=INTEGER},
+            </if>
+            <if test="bedSize != null">
+                bed_size = #{bedSize,jdbcType=VARCHAR},
+            </if>
+            <if test="cover != null">
+                cover = #{cover,jdbcType=VARCHAR},
+            </if>
+            <if test="windows != null">
+                windows = #{windows,jdbcType=INTEGER},
+            </if>
+            <if test="rest != null">
+                rest = #{rest,jdbcType=INTEGER},
+            </if>
+            update_time = now(),
+        </set>
+        where type_id = #{typeId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.hsr.hotel.entity.RoomType">
+    update room_type
+    set room_type = #{roomType,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      discount = #{discount,jdbcType=DOUBLE},
+      area = #{area,jdbcType=INTEGER},
+      bed_num = #{bedNum,jdbcType=INTEGER},
+      bed_size = #{bedSize,jdbcType=VARCHAR},
+      cover = #{cover,jdbcType=VARCHAR},
+      windows = #{windows,jdbcType=INTEGER},
+      rest = #{rest,jdbcType=INTEGER},
+      update_time = now()
+    where type_id = #{typeId,jdbcType=INTEGER}
+  </update>
+</mapper>

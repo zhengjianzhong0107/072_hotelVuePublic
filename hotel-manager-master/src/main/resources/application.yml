@@ -1,0 +1,36 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Pw_123456
+    url: jdbc:mysql://localhost:3306/hotel?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useSSL=true
+  servlet:
+    multipart:
+      max-file-size: 1073741824
+
+mybatis:
+  type-aliases-package: classpath*:cn.mafangui.hotel.entity
+  mapper-locations: classpath*:mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    cn.mafangui.hotel: debug
+
+alipay:
+  appId: 2016101600699846
+  appPrivateKey: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCgypY07GAWdCQtvy0B3S40LxvD8j53qmflD25Lpqd4feJtUl5Awu8GTNfpAIsYj9z547OVB4mbN/aBzEeCqcuWKqd+bGIotJ4+TAa3tWGFMBfDNMwauB6FHzu632DYwngztK5Omo9QdU4VkMfUhdS8SX81ryQgKmSUtZ4vVC9+4QFMI1lJEd/uiog9dRoEvkGUWhFD0Xj2NO4B8XHItmRsR8SH57lOzyBjE4O7E71P9XsfTi13+G6e54lh+vAYONhFICMVKoD9CIFmsOF67upxwU0qOUeo5GMrDneKEP4lV/4IR0hWEb+skAuZWvXnumkIRuwJ4gyUULNu2J7M9IdHAgMBAAECggEAJBXTKAV0exWNmQaynxx4ZhW8cXlIM6r2rh2Mb0Xzh8MYsdgudvJImm1cd1o73UNMIHjNsMCETWV92RtzYQuiOQ1RkbnZPbFrYifFyizWugFVE+YheE2h69ZanVHMdlkOiOwfwlxFlZT99TEM59ExMSB9gBrSTLW25Pjti0mlbx/Mt3s8Yud9mhI84YsEjyNwhFIVJiksJ0dTfE8b6GG3/i0TNRwKTMoqFLbyMmoCeTcKnFeH5bLjUJelpi8/VCl7OBGOpYpsZMhoSNHtV2pQY3d8PJMCDOsbm+ktPJs4cQwwHmMGaFJXj18Nxaxv8RXDXbv1I3MdEbQiPQAsi0zxgQKBgQDdH9b7HJNWUmIBNlh+QyJ4plggwpgzhCjIXKQ7wJmiFpHhXZV8ERmpgLohc+Ne7REgxpHLpV2+yUxvCmH/xLqbIEePZDiYDcwPZD0sT7/I+gUBfWloFqjxl3Jr2d/An2q9uuPvzyJK5bHLf/EziZVS6IH8qnJjJWarLsDnoMIRlwKBgQC6Jrq4k1P9XTkLzPqqeoZHFsLESmQMatDZw5yTivks/1xUVSbgALY/+NG1qVoyMJk73OklF0XMzmIc9Lf2vdyEjJG5X1RSWyLgIVNdj5XBxrBlOaufzHxSeQASjL8uaRehcyNZcYxi2qo5Dga6iykd3GMQ8N9BwH1+GcIxXkyN0QKBgAu6aJihB1+ItxIBY+guf2GO0RXLvG7fD5qw7zUMHhnuwIYHhKoz7fyDi1vC3chnIoVugsUeXD6GRruM/W2nbY5Uw/bjBe1qrewTEPuMr0tll2Zg1Hpk2UkXE0aNI8T/r5Wol/ZcMiFu1WNJwe1N2tGu61YPZEnF7hAeRrUCXci5AoGAKcJydOGoH9h/6aPMP95IrT3v53UAyMBVpeR6BadRisSmg8yuceX2/JbnBKe/Mi8w0PsX2lhEMlPCMti7REEHbTzTnBBErE0Bn+IZ/40sfVIDVFIBrFGFOkMmvwKQCOtOf8uCjJgqdCq1sSLyY3rAeJBuMOi4TNnPzTAeHlEXP2ECgYAc9cPAxN9DhXKjWnD7Nnk/y09N+lSEpYxxBiu3UJmYaG+ugjf3mmplsN9/I5uzg29RbA9qfaPlVVnzfrGv+WGIEpWp/kxzOLJh9Lh0R7iaqTpT88a2keQYXvlU3hhBpxCrZFpW2jO65l/VAV88nFPFm6VCOLnHJm8y9xq32Vh8DA==
+  alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk5xxayXKOEPj7+RMkscHGQYAxMZy7mlKxi4O+Sf0q2vrsy8vVsQmaM1Dkrre8jAHvG2syGPbAr/f535MsIwDWPsTxpYK2h443gzyniw5ZBtGEX1PyyeNTSq4MD5Wzw4ESWA7vcHqA/OgJuObO99rTjcI8R6qDSiAo/CRmiyWY80VvURF7cdKrMeCflDUvWFyLwdDK/LA+c+hvB8ypD9IzOXhcIKzm0WOg3eSQ9HEr4gOKVT5MTAp1Ot1ADDbiWnO80XZFs4Yb4z4jzVGRhjrHL/NZY9StmjX88y23Ry5xLl0x87HAdNcu/pc7PYuW0OVaccI0Dntdq6/zXGy0zy86QIDAQAB
+  notifyUrl: http://22p8sb.natappfree.cc/alipay/notify
+
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+
+file:
+  ip: localhost

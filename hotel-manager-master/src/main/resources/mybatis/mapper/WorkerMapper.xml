@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hsr.hotel.mapper.WorkerMapper">
+    <resultMap id="BaseResultMap" type="com.hsr.hotel.entity.Worker">
+        <id column="worker_id" jdbcType="INTEGER" property="workerId"/>
+        <result column="role" jdbcType="VARCHAR" property="role"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="gender" jdbcType="CHAR" property="gender"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="department" jdbcType="INTEGER" property="department"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="workDept" type="com.hsr.hotel.entity.dto.WorkerVo">
+        <id column="worker_id" jdbcType="INTEGER" property="workerId"/>
+        <result column="role" jdbcType="VARCHAR" property="role"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="gender" jdbcType="CHAR" property="gender"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="department" jdbcType="INTEGER" property="department"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="departname" jdbcType="VARCHAR" property="departName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    worker_id, role, username, password, name, gender, phone,department, email, address,
+    create_time, update_time
+  </sql>
+    <select id="getCount" resultType="java.lang.Integer">
+    select count(worker_id) from worker_info
+  </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from worker_info
+        where worker_id = #{workerId,jdbcType=INTEGER}
+    </select>
+    <select id="selectByUsername" parameterType="String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from worker_info
+        where username = #{username,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByUsernameAndPassword" parameterType="String" resultMap="BaseResultMap">
+    select * from worker_info
+    where username = #{username,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR} and role = #{role,jdbcType=VARCHAR}
+  </select>
+    <select id="selectByUsernamePassword" parameterType="String" resultMap="BaseResultMap">
+    select * from worker_info
+    where username = #{username,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+  </select>
+    <select id="selectByRole" parameterType="String" resultMap="BaseResultMap">
+    select * from worker_info
+    where role = #{role,jdbcType=VARCHAR}
+  </select>
+    <!--根绝角色和用户名查找-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from worker_info where 2>1
+        <if test="role!=null and role!=''">
+            AND role = #{role,jdbcType=VARCHAR}
+        </if>
+        <if test="search != null and search != ''">
+            AND username like concat('%',#{search},'%')
+        </if>
+    </select>
+
+    <select id="selectAllByPage" resultMap="workDept">
+        select * from worker_info where 2>1
+        <choose>
+            <when test="role!=null and role!=''">
+                AND role = #{role,jdbcType=VARCHAR}
+            </when>
+            <when test="search != null and search != ''">
+                AND username like #{search,jdbcType=VARCHAR}
+            </when>
+        </choose>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from worker_info
+    where worker_id = #{workerId,jdbcType=INTEGER}
+  </delete>
+    <!--批量删除-->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete from worker_info
+        <where>
+            <foreach item="item" index="index" collection="ids"
+                     open="worker_id in (" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </delete>
+    <!--出现问题-->
+    <insert id="insert" parameterType="com.hsr.hotel.entity.Worker">
+    insert into worker_info ( role, username,
+      password, name, gender,
+      phone, department,email,
+      address, create_time, update_time
+      )
+    values (#{role,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+      #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR},
+      #{phone,jdbcType=VARCHAR}, #{department,jdbcType=INTEGER},#{email,jdbcType=VARCHAR},
+      #{address,jdbcType=VARCHAR}, now(),now()
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.hsr.hotel.entity.Worker">
+        insert into worker_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workerId != null">
+                worker_id,
+            </if>
+            <if test="role != null">
+                role,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="gender != null">
+                gender,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="department != null">
+                department,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            create_time,
+            update_time,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workerId != null">
+                #{workerId,jdbcType=INTEGER},
+            </if>
+            <if test="role != null">
+                #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=CHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                #{department,jdbcType=INTEGER},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            now(),
+            now(),
+        </trim>
+    </insert>
+    <!--批量插入-->
+    <insert id="insertBatch">
+        insert into worker_info ( role, username,
+        password, name, gender,
+        phone, department,email,
+        address, create_time, update_time
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.role},#{item.username},#{item.password},#{item.name},#{item.gender},
+            #{item.phone},#{item.department},#{item.email},#{item.address},now(),now())
+        </foreach>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.hsr.hotel.entity.Worker">
+        update worker_info
+        <set>
+            <if test="role != null">
+                role = #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                gender = #{gender,jdbcType=CHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                department = #{department,jdbcType=INTEGER},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where worker_id = #{workerId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.hsr.hotel.entity.Worker">
+    update worker_info
+    set role = #{role,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=CHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+    where worker_id = #{workerId,jdbcType=INTEGER}
+  </update>
+
+</mapper>
